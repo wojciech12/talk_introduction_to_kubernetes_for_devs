@@ -1,0 +1,859 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Kubernetes - Introduction</title>
+		
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="ext/bootstrap-4.0.0-beta/bootstrap.min.css">
+		
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		
+		
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+			
+		<style>
+			.reveal section img {
+				background-color:white;
+				border:0;
+				box-shadow: 0 0 0 0;
+			}
+		</style>
+	</head>
+	<body>
+
+
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>K<span style="text-transform: lowercase;">ubernetes</span></h1>
+					<img src="img/kubernetes_logo.svg" style="background-color:white;border:0;width:30%"/> 
+					<h2>I<span style="text-transform: lowercase;">ntroduction</span></h2>
+					<!--p><h6>Wojciech Barczyński (SMACC)</h6></p -->
+				</section>
+
+				<section>
+					<h3>Wojciech Barczyński</h3>
+					<div class="container">
+						<div class="row">
+							<div class='col-md-9'>
+								<ul>
+									<li>(hiring) Senior Software Engineer<br />Lead of Warsaw Team - SMACC</li>
+									<li>System Engineer background</li>
+									<li>Interests:<br />working software</li>
+									<li>Hobby:<br />teaching software engineering</li>
+								</ul>
+							</div>
+							<div class='col-md-2'>
+								<img src="img/moje_zdjecie.jpg" />
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section>
+					<h3>Background</h3><!-- Dude, why should I listen to you? -->
+						<ul>
+							<li>A top AI FinTech ➡ microservices and k8s</li>
+							<li>Before renew tech stack of a top Indonesian mobile ecommerce</li>
+							<li>3.5y with Openstack, 1000+ nodes, 21 data centers</li>
+							<li>I do not like INFRA :D</li>
+							<!-- li>I do not like INFRA :D</li>
+							<li>I do not like: puppet, chef, ansible...</li -->
+						</ul>
+				</section>
+
+				<!-- WHY, HOW, WHAT -->
+				<section>
+					<h4>Kubernetes</h4>
+					<div class="container">
+						<div class="row">
+							<div class='col-md-9'>
+								<ul>
+									<li>Kubernetes - greek for helmsman</li>
+									<li>Run and Manages containers</li>
+									<li>Inspired by Google's Borg</li>
+									<li>Integrated with AWS, GCP, Azure</li>
+									<li>Becoming an integration platform for large ecosystem</li>
+								</ul>
+								<p>Manages Applications not Machines!</p>
+							</div>
+							<div class='col-md-2'>
+								<img src="img/kubernetes_logo.svg" style="background-color:white;width:100%" /> 
+							</div>
+						</div>
+					</div>
+				</section>
+				
+				<section>
+					<h4>Goals</h4>
+					<ul>
+						<li>Utilized resources nearly 100%</li>
+						<li>Get to applications/services mindset</li>
+						<li>Enforce loosely couple software - 12factor apps, Amazon-API approach</li>
+						<li>Best practises included, e.g., name service, metadata discovery, ...</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Current winner</h4>
+<verbose>« Amazon joined Kubernetes <br /> on 10.08.2017 »</verbose>
+				</section>
+
+				<!-- WHY, HOW, WHAT -->
+				<section data-markdown>
+					<script type="text/template">
+						## Why Kubernetes?
+						
+						- Data Center as a Black Box
+						- Batteries for your (12factor) apps
+					</script>
+				</section>
+				
+				<!-- WHY, HOW, WHAT -->
+				<section data-markdown>
+					<script type="text/template">
+						## Why Kubernetes?
+						
+						- Give you complete control over your application with simple *yaml* config files
+						- Use *labels* to auto-wire your app to monitoring, logging, and alarming
+						- Let you to, almost forget, about the infrastructure
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+						### B<span style="text-transform: lowercase;">atteries</span>
+					
+						- Load Balancing
+						- Name Service Discovery
+						- Metadata and Annotation support
+						- Decoupled interface and implementation
+						- Labeled based matching
+					</script>
+				</section>
+				
+				<!--
+					auto-wiring
+					- service discovery
+					- failover
+					- load balancing
+					-->
+				
+				<section data-markdown>
+					<script type="text/template">
+<!-- img src="img/kubernetes_logo.svg" style="background-color:white;width:60%" / -->
+<h5>Data center as a Black box</h5>
+					</script>
+				</section>
+				
+				<section>
+					<h3>Kubernetes</h3>
+					<img src="img/k8s_intro.svg" style="width:90%"/>
+					<small><code>make docker_push; kubectl create -f app-srv-dpl.yaml</code></small>
+				</section>
+
+				<section>
+					<h3>Scale up! Scale down!</h3>
+					<img src="img/k8s_intro_2.svg" style="width:90%"/>
+					<small><code>kubectl --replicas=3 -f app-srv-dpl.yaml</code></small>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Ingress controller
+
+- api.smacc.io/v1/users ➡ service: users-v1
+- api.smacc.io/v2/users ➡ service: users-v2
+- api.smacc.io/accounts ➡ service: accounts
+- smacc.io ➡ service: website
+					</script>
+				</section>
+
+
+				<section>
+					<h2>Ingress Controller</h2>
+<img src="img/traefik_architecture.svg" />
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Rolling updates!
+
+<img src="img/k8s_intro_rolling_upates_1.svg" style="width:80%"/>
+<small><code>kubectl set image deployment/app app=app:v2.0.0</code></small>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Rolling updates!
+
+<img src="img/k8s_intro_rolling_upates_2.svg" style="width:80%"/>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Rolling updates!
+
+<img src="img/k8s_intro_rolling_upates_3.svg" style="width:80%"/>
+
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Rolling updates!
+
+<img src="img/k8s_intro_rolling_upates_4.svg" style="width:80%"/>
+					</script>
+				</section>
+
+				<section>
+<h3>Load Balancing</h3>
+<img src="img/k8s_loadbalancing.svg" style="width:90%"/>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Resistance!
+
+<img src="img/k8s_intro_node_out_1.svg" style="width:80%">
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+## Resistance!
+
+<img src="img/k8s_intro_node_out_2.svg" style="width:80%">
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Resistance!
+
+- When the node dies in flames
+- When other apps (with higher guaranteed quotas) eats all memory
+- When you need to drain nodes before upgrade
+- You can easily scale up, create machine and join it to cluster (easier with kops or on GCE)
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Federation
+<img src="img/k8s_federation.svg" style="width:80%" />
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Much more
+
+Plug-and-play integrations:
+
+- integration with AWS, Google Cloud Platform, and Azure
+- multiple drivers for network, storage,...
+- you can run on minikube
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+## Much more
+				
+Kubernetes administrated with kubernetes:
+				
+- everything run in pods
+- e.g., you deploy your log collectors for k8s as pods:
+<small>http://wbarczynski.pl/centralized-logging-for-kubernetes-with-fluentd-and-elasticsearch/</small>
+					</script>
+				</section>
+				
+
+				<!-- section data-markdown>
+					<script type="text/template">
+						## B<span style="text-transform: lowercase;">atteries</span>
+					</script>
+				</section -->
+			
+			<section>
+				<h4>Basic Concepts</h4>
+				<table>
+					<thread>
+						<tr>
+							<th>Name</th><th>Purpose</th><th></th>
+						</tr>
+					</thread>
+					<tbody>
+						<tr>
+							<td>Service</td><td>Interface</td><td>Service Name, port, labels, annotations</td>
+						</tr>
+						<tr>
+							<td>Deployment</td><td>Factory</td><td>How many pods with which docker images, labels</td>
+						</tr>
+						<tr>
+							<td>Pod</td><td>Implementation</td><td>1+ docker images running in 1 pod</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Basic concepts
+
+- config / secret ➡ config and files
+- ingress-controller  ➡ url pattern ➡ service
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+### Service
+
+service.yaml:
+<pre>
+<code class="yaml" data-trim="">
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-status
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: api-status
+</code>
+</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Service
+<pre>
+<code class="bash" data-trim="">
+# create the service and deployment
+kubectl create -f api-status-srv.yaml
+kubectl create -f api-status-dpl.yaml
+
+# get to a running docker (in a pod)
+kubectl -it exec app-999-8zh1p /bin/bash
+
+# check whether name service works
+curl http://api-status/health
+OK
+</code>
+</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Basic concepts
+<img src="img/k8s_basic_concepts.svg" width="70%" />
+<!-- p>Loosely coupled, based on metadata and labels.</p -->
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### <span style="text-transform: lowercase;">deployment.yaml</span>
+<pre>
+<code class="yaml" data-trim="">
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: api-status-nginx
+  app: api-status
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: api-status-nginx
+        app: api-status
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+</code>
+</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Config
+
+- env variables in deployment:
+
+<pre><code class="yaml" data-trim="">
+    env:
+    - name: SEARCH_ENGINE_USER
+      value: mighty_mouse
+</code></pre>
+					</script>
+			</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Config
+
+- feed envs from configmaps:
+
+<pre><code class="yaml" data-trim="" width="100%">
+env:
+- name: SEARCH_ENGINE_USER
+  valueFrom:
+      configMapKeyRef:
+          name: my-config
+          key: search.user</code></pre>
+					</script>
+
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Config
+
+- you can ship files using configmaps/secrets
+
+<pre><code class="bash">kubectl create configmap my-config-file
+	--from-file=config.json</code>
+</pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Config
+
+You can also run your own:
+
+- HashiCorp Consul or etcd
+- HashiCorp Vault
+					</script>
+				</section>
+
+
+				<!-- section data-markdown>
+					<script type="text/template">
+## Name Service
+
+- injected directly to your DNS client
+
+		curl elasticsearch:9200/
+	
+- easy to do:
+
+		kubectl expose deployment user-store \
+		--name=user-store
+		--type=NodeService
+	
+- check:
+
+		curl user-store/health
+		OK
+					</script>
+				</section -->
+
+				<section>
+					<h3>Metadata and annotations</h3>		
+					<ul>
+						<li>Auto-wiring</li>
+						<li>Precise discovery</li>
+						<li>Reporting</li>
+						<li>Labeling targets for security scans</li>
+						<li>Labeling critical services for oncall (see alertmanager)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>Monitoring with kubernetes</h3>
+					<ul>
+						<li>You deploy a memcached</li>
+						<li>Exposed its prometheus metrics on <code>metrics/</code></li>
+						<li>How to ship metrics?</li>
+					</ul>
+				</section>
+
+
+				<section>
+					<h3>Annotations!</h3>
+<p>memcached-0-deployment.yaml</p>
+<pre><code class="yaml" data-trim="" width="100%">
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached-0
+  labels:
+    app: memcached
+    kubernetes.io/name: "memcached"
+    role: shard-0
+    tier: backend
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/scheme: "http"
+    prometheus.io/path: "metrics"
+    prometheus.io/port: "9150"
+spec:
+  type: NodePort
+  ports:
+    - port: 11211
+      targetPort: 11211
+  selector:
+    app: memcached
+    role: shard-0
+</code></pre>
+<small>https://github.com/skarab7/kubernetes-memcached</small>
+				</section>
+
+				<section>
+					<h3>Ingress Controller with Traefik?</h3>
+					<img src="img/traefik.logo.png" />
+				</section>
+
+				<section>
+<h3>Annotations!</h3>
+	
+<p>Use traefik instead of built-in reverse proxy</p>
+<pre><code class="yaml" data-trim="" width="100%">
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: api-status
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: api.example.com
+    http:
+      paths:
+        - path: /status
+          backend:
+            serviceName: api-status
+            servicePort: 80
+</code></pre>
+				</section>
+
+				<section>
+					<h3>Labels!</h3>
+Monitoring rule that uses labels:
+<pre><code>
+ALERT ProductionAppServiceInstanceDown
+   IF up { environment = "production", app =~ ".+"} == 0
+   FOR 4m
+   ANNOTATIONS {
+        summary = "Instance of {{$labels.app}} is down",
+        description = " Instance  {{$labels.instance}} of app {{$labels.app}} has been down for more than 4 minutes"
+   }
+</code></pre>
+<p>AlertManager</p>
+				</section>
+
+				<section>
+					<h3>Labels!</h3>	
+Call sb if the label is <code>severity=page</code>:
+<pre><code>
+ group_by: [cluster]
+ # If an alert isn't caught by a route, send it to the pager.
+ receiver: team-pager
+ routes:
+  - match:
+      severity: page
+    receiver: team-pager
+
+receivers:
+- name: team-pager
+  opsgenie_configs:
+  - api_key: $API_KEY
+    teams: example_team</code></pre>
+<p>AlertManager</p>
+</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## There is so much more
+
+- resource quotas
+- events in Kubernetes
+- readiness probes
+- liveness probes
+- volumes
+- stateful
+- namespaces
+- ...
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+## Kuberentes
+
+- Awesome command-line
+- Resilient platform
+- simple YAML files to setup your service,
+- service discovery included
+- annotations and metadata discovery included
+					</script>
+				</section>
+
+				<section>
+					<h1>0.1 ➡ 1.0</h1>
+					<p>Your component needs to get much more smarter.</p>
+				</section>
+				
+				<!-- section data-markdown>
+					<script type="text/template">
+					# the big 1
+					</script>
+				</section -->
+
+				<section data-markdown>
+					<script type="text/template">
+					### Service self-consciousness
+					
+					Your endpoint:
+					
+					- <i>metrics/</i>
+					- <i>alertrules/</i>- [WIP]
+					- <i>health/</i> or <i>healthz/</i>
+					- <i>info/</li>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					### Deep look inside
+
+					- when I am ready to serve requests
+					- when I need to restart myself
+					- what to do when dependent services are down
+					- ...
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					### Deep look inside
+
+					- Am I really stateless?
+					- Caching?
+					- fail-fast, start fast
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					### Relations with others
+
+					- master-worker relationships
+					- waiting for other resources / services
+				</script>
+				</section>
+
+				
+				<section data-markdown>
+					<script type="text/template">
+					### 12factor apps
+
+					- find services by name or URI
+					- move the important config to environment variables
+				</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					### Logging
+
+					- logstash json format
+					- make configurable with ENV variable
+
+					<small><b>EFK</b> or ELK</small>
+				</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					### What with your databases
+
+					- Keep it in a separated (k8s) cluster
+					- The best, go with DaaS
+					- With <i>Stateful</i>, you can run your db in k8s
+					
+					<small>Long discussion...</small>
+				</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+					### Migration of env
+					
+					Staging, production, canary, green/blue ...:
+
+					- If you have $$$, have a separated k8s cluster
+					- If not, use Namespaces
+				</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+					### Apps in new world
+					
+					- 12 factor apps (Heroku, 2012)
+					- much much smarter
+					- much faster
+					- much more predictable
+					- much harder to develop :D
+					- Forging experience into code [WIP]: https://github.com/microdevs
+					</script>
+				</section>
+				
+			<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom" style="position: relative; top:0">
+				<h1>Thank you</h1>
+			</section>
+			
+			<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom"
+			style="position: relative; top:0">
+				<h4>(<span style="text-transform: lowercase;">hiring</span>) W<span style="text-transform: lowercase;">ojciech</span> B<span style="text-transform: lowercase;">arczyński (wojciech.barczynski@smacc.io)</span></h4>
+			</section>
+
+			<section>Backup slides</section>	
+
+				<section data-markdown>
+					<script type="text/template">
+						# 6 + 1 steps
+						<small>The big 1 - making your app smarter</small>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 1. Clean up 
+
+- Single script for repo - Makefile [1]
+- Resurrect the README
+
+<small>[1] With zsh or bash auto-completion plugin in your terminal.</small>
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+### 2. Get back all the knowledge
+
+- Puppet, Chef, ... ➡ Dockerfile
+- Check the instances ➡ Dockerfile, README.rst
+- Nagios, ... ➡ README.rst, <code>checks/</code>
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+### 3. Introduce run_local
+
+- <code>make run_local</code>
+- A nice section on how to run in README.rst
+- Use: <code>docker-compose</code>
+
+The most crucial point.
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 4. Get to kubernetes
+
+- <code>make kube_create_config</code>
+- <code>make kube_apply</code>
+- Generate the yaml files if your envs differ
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 5. Continuous Deployment
+
+Simple components:
+
+- test code, build docker, push to docker repo
+- run the rolling update:<br />
+<code>kubectl set image deployment/api-status nginx=nginx:1.9.1</code>
+- I use TravisCI
+					</script>
+				</section>
+				
+				<section data-markdown>
+					<script type="text/template">
+### 5. Continuous Deployment
+
+Complex components:
+
+- with label-based matching, the sky is the limit
+</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 6. Keep it running
+
+Brigde the new with old:
+
+- You can add your external servies to the k8s Name Service
+- You can bridge Kubernetes services to your Service Discovery [1]
+
+<small>[1] You can subscribe to K8S events to keep, e.g., your consul in sync</small>
+					</script>
+				</section>
+
+				<!--section>
+					### Kube vs Mesos
+					- Mesos all kinds of workflows with customized orchestration
+					- Kube for new word of smart small components
+				</section -->
+			</div>
+		</div>
+		</div>
+		
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
